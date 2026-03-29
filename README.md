@@ -1,30 +1,30 @@
-# @nexsendo/sdk
+# @textbubbles/sdk
 
-TypeScript SDK for the Nexsendo messaging API. Supports iMessage, group chats, contacts, payments, webhooks, and more.
+TypeScript SDK for the TextBubbles messaging API. Supports iMessage, group chats, contacts, payments, webhooks, and more.
 
 ## Install
 
 ```bash
-npm install @nexsendo/sdk
+npm install @textbubbles/sdk
 ```
 
 ## Quick Start
 
 ```typescript
-import { NexsendoClient } from "@nexsendo/sdk";
+import { TextBubblesClient } from "@textbubbles/sdk";
 
-const nexsendo = new NexsendoClient({
+const tb = new TextBubblesClient({
   apiKey: "your-api-key-here",
 });
 
 // Send a message
-const message = await nexsendo.messages.send({
+const message = await tb.messages.send({
   to: "+14155551234",
-  content: { text: "Hello from Nexsendo!" },
+  content: { text: "Hello from TextBubbles!" },
 });
 
 // Send with effects
-await nexsendo.messages.send({
+await tb.messages.send({
   to: "+14155551234",
   content: { text: "Congratulations!" },
   effect: "confetti",
@@ -41,10 +41,10 @@ Add to your project's `AGENTS.md` or run:
 
 ```bash
 # Copy the skill to your project
-cp -r node_modules/@nexsendo/sdk/skill ./nexsendo-skill
+cp -r node_modules/@textbubbles/sdk/skill ./textbubbles-skill
 
 # Or reference it in AGENTS.md
-echo "Skill: node_modules/@nexsendo/sdk/skill/SKILL.md" >> AGENTS.md
+echo "Skill: node_modules/@textbubbles/sdk/skill/SKILL.md" >> AGENTS.md
 ```
 
 ### Cursor
@@ -52,7 +52,7 @@ echo "Skill: node_modules/@nexsendo/sdk/skill/SKILL.md" >> AGENTS.md
 Add to `.cursor/rules`:
 
 ```
-Read and follow the Nexsendo SDK skill at: node_modules/@nexsendo/sdk/skill/SKILL.md
+Read and follow the TextBubbles SDK skill at: node_modules/@textbubbles/sdk/skill/SKILL.md
 ```
 
 Or copy `skill/SKILL.md` content into your `.cursorrules` file.
@@ -71,7 +71,7 @@ Or copy `skill/SKILL.md` content into your `.cursorrules` file.
 
 ```typescript
 // Send a message
-await nexsendo.messages.send({
+await tb.messages.send({
   to: "+14155551234",
   content: { text: "Hello!", media: ["https://example.com/photo.jpg"] },
   effect: "confetti",
@@ -82,7 +82,7 @@ await nexsendo.messages.send({
 });
 
 // List messages
-const messages = await nexsendo.messages.list({
+const messages = await tb.messages.list({
   to: "+14155551234",
   status: "delivered",
   limit: 20,
@@ -90,10 +90,10 @@ const messages = await nexsendo.messages.list({
 });
 
 // Get a message
-const msg = await nexsendo.messages.get("msg_abc123");
+const msg = await tb.messages.get("msg_abc123");
 
 // Send image carousel (2-20 images)
-await nexsendo.messages.sendCarousel({
+await tb.messages.sendCarousel({
   to: "+14155551234",
   images: [
     "https://example.com/img1.jpg",
@@ -102,19 +102,19 @@ await nexsendo.messages.sendCarousel({
 });
 
 // List scheduled messages
-const scheduled = await nexsendo.messages.listScheduled();
+const scheduled = await tb.messages.listScheduled();
 
 // Cancel a scheduled message
-await nexsendo.messages.cancelSchedule("msg_abc123");
+await tb.messages.cancelSchedule("msg_abc123");
 
 // Delete a message
-await nexsendo.messages.delete("msg_abc123");
+await tb.messages.delete("msg_abc123");
 
 // React to a message
-await nexsendo.messages.react("msg_abc123", { reaction: "love" });
+await tb.messages.react("msg_abc123", { reaction: "love" });
 
 // Edit a message
-await nexsendo.messages.edit("msg_abc123", {
+await tb.messages.edit("msg_abc123", {
   content: { text: "Updated text" },
 });
 ```
@@ -123,37 +123,37 @@ await nexsendo.messages.edit("msg_abc123", {
 
 ```typescript
 // Create a group chat
-const chat = await nexsendo.chats.create({
+const chat = await tb.chats.create({
   name: "Project Team",
   participants: ["+14155551234", "+14155555678"],
 });
 
 // Get chat details
-const chatInfo = await nexsendo.chats.get("chat_guid");
+const chatInfo = await tb.chats.get("chat_guid");
 
 // Rename a chat
-await nexsendo.chats.rename("chat_guid", { name: "New Name" });
+await tb.chats.rename("chat_guid", { name: "New Name" });
 
 // Add/remove participants
-await nexsendo.chats.addParticipant("chat_guid", { phoneNumber: "+14155559999" });
-await nexsendo.chats.removeParticipant("chat_guid", { phoneNumber: "+14155559999" });
+await tb.chats.addParticipant("chat_guid", { phoneNumber: "+14155559999" });
+await tb.chats.removeParticipant("chat_guid", { phoneNumber: "+14155559999" });
 
 // Leave a chat
-await nexsendo.chats.leave("chat_guid");
+await tb.chats.leave("chat_guid");
 
 // Mark read/unread
-await nexsendo.chats.markRead("chat_guid");
-await nexsendo.chats.markUnread("chat_guid");
+await tb.chats.markRead("chat_guid");
+await tb.chats.markUnread("chat_guid");
 
 // Send typing indicator
-await nexsendo.chats.sendTyping("chat_guid");
+await tb.chats.sendTyping("chat_guid");
 ```
 
 ## Contacts
 
 ```typescript
 // Create a contact
-const contact = await nexsendo.contacts.create({
+const contact = await tb.contacts.create({
   firstName: "Jane",
   lastName: "Doe",
   phoneNumber: "+14155551234",
@@ -162,25 +162,25 @@ const contact = await nexsendo.contacts.create({
 });
 
 // List contacts
-const contacts = await nexsendo.contacts.list({
+const contacts = await tb.contacts.list({
   tag: "vip",
   search: "Jane",
   limit: 50,
 });
 
 // Get, update, delete
-const c = await nexsendo.contacts.get("contact_id");
-await nexsendo.contacts.update("contact_id", { tags: ["vip", "partner"] });
-await nexsendo.contacts.delete("contact_id");
+const c = await tb.contacts.get("contact_id");
+await tb.contacts.update("contact_id", { tags: ["vip", "partner"] });
+await tb.contacts.delete("contact_id");
 
 // Bulk operations (max 100 contacts)
-await nexsendo.contacts.bulkCreate({
+await tb.contacts.bulkCreate({
   contacts: [
     { firstName: "Alice", phoneNumber: "+14155551111" },
     { firstName: "Bob", phoneNumber: "+14155552222" },
   ],
 });
-await nexsendo.contacts.bulkDelete({ ids: ["id1", "id2"] });
+await tb.contacts.bulkDelete({ ids: ["id1", "id2"] });
 ```
 
 ## Payment Requests (Apple Cash)
@@ -191,7 +191,7 @@ Request payments via iMessage. This sends a formatted message with payment detai
 
 ```typescript
 // Request a payment (sends formatted iMessage)
-const payment = await nexsendo.payments.request({
+const payment = await tb.payments.request({
   to: "+14155551234",
   amount: 25.0,
   currency: "USD",
@@ -199,13 +199,13 @@ const payment = await nexsendo.payments.request({
 });
 
 // List payment requests
-const payments = await nexsendo.payments.list();
+const payments = await tb.payments.list();
 
 // Get a specific request
-const req = await nexsendo.payments.get("pay_abc123");
+const req = await tb.payments.get("pay_abc123");
 
 // Cancel a pending request (marks as cancelled, fires webhook)
-await nexsendo.payments.cancel("pay_abc123");
+await tb.payments.cancel("pay_abc123");
 ```
 
 ### How Payment Detection Works
@@ -219,24 +219,24 @@ await nexsendo.payments.cancel("pay_abc123");
 
 ```typescript
 // Get profile state
-const state = await nexsendo.profile.getState();
+const state = await tb.profile.getState();
 
 // Set profile
-await nexsendo.profile.set({
+await tb.profile.set({
   name: "John Doe",
   displayName: "John",
   photo: "https://example.com/photo.jpg",
 });
 
 // Delete profile
-await nexsendo.profile.delete();
+await tb.profile.delete();
 ```
 
 ## Capabilities
 
 ```typescript
 // Check if a phone number supports iMessage
-const result = await nexsendo.capabilities.check("+14155551234");
+const result = await tb.capabilities.check("+14155551234");
 console.log(result.iMessage); // true or false
 ```
 
@@ -246,11 +246,11 @@ console.log(result.iMessage); // true or false
 
 ```typescript
 // Get current webhook config
-const config = await nexsendo.webhooks.get();
+const config = await tb.webhooks.get();
 
 // Set webhook config
-await nexsendo.webhooks.set({
-  url: "https://example.com/webhooks/nexsendo",
+await tb.webhooks.set({
+  url: "https://example.com/webhooks/textbubbles",
   secret: "whsec_your_secret",
   events: ["message.received", "message.delivered"],
 });
@@ -259,7 +259,7 @@ await nexsendo.webhooks.set({
 ### Handling Webhooks
 
 ```typescript
-import { verifyWebhookSignature, parseWebhookEvent, isMessageEvent } from "@nexsendo/sdk/webhooks";
+import { verifyWebhookSignature, parseWebhookEvent, isMessageEvent } from "@textbubbles/sdk/webhooks";
 
 // Verify signature
 const isValid = await verifyWebhookSignature(rawBody, signature, secret);
@@ -274,13 +274,13 @@ if (isMessageEvent(event)) {
 
 ### Next.js Integration
 
-**App Router** (`app/api/webhooks/nexsendo/route.ts`):
+**App Router** (`app/api/webhooks/textbubbles/route.ts`):
 
 ```typescript
-import { createWebhookHandler } from "@nexsendo/sdk/nextjs";
+import { createWebhookHandler } from "@textbubbles/sdk/nextjs";
 
 const handler = createWebhookHandler({
-  secret: process.env.NEXSENDO_WEBHOOK_SECRET!,
+  secret: process.env.TEXTBUBBLES_WEBHOOK_SECRET!,
   handlers: {
     "message.received": async (event) => {
       console.log("New message from:", event.data.from);
@@ -298,13 +298,13 @@ const handler = createWebhookHandler({
 export const POST = handler;
 ```
 
-**Pages Router** (`pages/api/webhooks/nexsendo.ts`):
+**Pages Router** (`pages/api/webhooks/textbubbles.ts`):
 
 ```typescript
-import { createWebhookHandler } from "@nexsendo/sdk/nextjs";
+import { createWebhookHandler } from "@textbubbles/sdk/nextjs";
 
 export default createWebhookHandler({
-  secret: process.env.NEXSENDO_WEBHOOK_SECRET!,
+  secret: process.env.TEXTBUBBLES_WEBHOOK_SECRET!,
   handlers: {
     "message.received": async (event) => {
       console.log("New message:", event.data.content.text);
@@ -339,15 +339,15 @@ export default createWebhookHandler({
 
 ```typescript
 import {
-  NexsendoError,
+  TextBubblesError,
   AuthenticationError,
   RateLimitError,
   ValidationError,
   NotFoundError,
-} from "@nexsendo/sdk";
+} from "@textbubbles/sdk";
 
 try {
-  await nexsendo.messages.send({ to: "+1...", content: { text: "Hi" } });
+  await tb.messages.send({ to: "+1...", content: { text: "Hi" } });
 } catch (err) {
   if (err instanceof RateLimitError) {
     console.log("Rate limited, retry after:", err.retryAfter, "seconds");
@@ -357,7 +357,7 @@ try {
     console.log("Invalid request:", err.details);
   } else if (err instanceof NotFoundError) {
     console.log("Resource not found");
-  } else if (err instanceof NexsendoError) {
+  } else if (err instanceof TextBubblesError) {
     console.log("API error:", err.status, err.message);
   }
 }
@@ -368,7 +368,7 @@ try {
 All request params and response types are exported:
 
 ```typescript
-import type { Message, SendMessageParams, WebhookEvent } from "@nexsendo/sdk";
+import type { Message, SendMessageParams, WebhookEvent } from "@textbubbles/sdk";
 ```
 
 ## Requirements

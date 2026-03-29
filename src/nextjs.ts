@@ -56,7 +56,7 @@ async function handleAppRouter(
     return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405 });
   }
 
-  const signature = req.headers.get("x-nexsendo-signature") ?? "";
+  const signature = req.headers.get("x-textbubbles-signature") ?? "";
   const body = await req.text();
 
   const valid = await verifyWebhookSignature(body, signature, secret);
@@ -107,7 +107,7 @@ async function handlePagesRouter(
     return;
   }
 
-  const signature = (req.headers?.["x-nexsendo-signature"] ?? "") as string;
+  const signature = (req.headers?.["x-textbubbles-signature"] ?? "") as string;
   const body = getRawBody(req);
 
   const valid = await verifyWebhookSignature(body, signature, secret);

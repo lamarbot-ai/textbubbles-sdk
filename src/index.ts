@@ -1,13 +1,13 @@
-export { NexsendoClient } from "./client.js";
+export { TextBubblesClient } from "./client.js";
 export {
-  NexsendoError,
+  TextBubblesError,
   AuthenticationError,
   RateLimitError,
   ValidationError,
   NotFoundError,
 } from "./errors.js";
 export type {
-  NexsendoConfig,
+  TextBubblesConfig,
   MessageEffect,
   ReactionType,
   MessageStatus,

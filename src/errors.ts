@@ -1,25 +1,25 @@
-export class NexsendoError extends Error {
+export class TextBubblesError extends Error {
   public readonly status: number;
   public readonly code: string;
   public readonly details?: unknown;
 
   constructor(message: string, status: number, code: string, details?: unknown) {
     super(message);
-    this.name = "NexsendoError";
+    this.name = "TextBubblesError";
     this.status = status;
     this.code = code;
     this.details = details;
   }
 }
 
-export class AuthenticationError extends NexsendoError {
+export class AuthenticationError extends TextBubblesError {
   constructor(message = "Invalid or missing API key") {
     super(message, 401, "authentication_error");
     this.name = "AuthenticationError";
   }
 }
 
-export class RateLimitError extends NexsendoError {
+export class RateLimitError extends TextBubblesError {
   public readonly retryAfter: number | null;
 
   constructor(message = "Rate limit exceeded", retryAfter: number | null = null) {
@@ -29,14 +29,14 @@ export class RateLimitError extends NexsendoError {
   }
 }
 
-export class ValidationError extends NexsendoError {
+export class ValidationError extends TextBubblesError {
   constructor(message: string, details?: unknown) {
     super(message, 400, "validation_error", details);
     this.name = "ValidationError";
   }
 }
 
-export class NotFoundError extends NexsendoError {
+export class NotFoundError extends TextBubblesError {
   constructor(message = "Resource not found") {
     super(message, 404, "not_found");
     this.name = "NotFoundError";

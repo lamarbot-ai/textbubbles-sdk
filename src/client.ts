@@ -1,12 +1,12 @@
 import {
-  NexsendoError,
+  TextBubblesError,
   AuthenticationError,
   RateLimitError,
   ValidationError,
   NotFoundError,
 } from "./errors.js";
 import type {
-  NexsendoConfig,
+  TextBubblesConfig,
   SendMessageParams,
   ListMessagesParams,
   SendCarouselParams,
@@ -37,9 +37,9 @@ import type {
   SetWebhookParams,
 } from "./types.js";
 
-const DEFAULT_BASE_URL = "https://api.nexsendo.com";
+const DEFAULT_BASE_URL = "https://api.textbubbles.com";
 
-export class NexsendoClient {
+export class TextBubblesClient {
   private readonly apiKey: string;
   private readonly baseUrl: string;
 
@@ -51,7 +51,7 @@ export class NexsendoClient {
   public readonly capabilities: CapabilitiesResource;
   public readonly webhooks: WebhooksResource;
 
-  constructor(config: NexsendoConfig) {
+  constructor(config: TextBubblesConfig) {
     if (!config.apiKey) {
       throw new AuthenticationError("API key is required");
     }
@@ -123,7 +123,7 @@ export class NexsendoClient {
       case 422:
         throw new ValidationError(message, errorBody?.details);
       default:
-        throw new NexsendoError(
+        throw new TextBubblesError(
           message,
           res.status,
           errorBody?.code ?? "api_error",
@@ -136,7 +136,7 @@ export class NexsendoClient {
 // ── Resource Classes ──
 
 class MessagesResource {
-  constructor(private client: NexsendoClient) {}
+  constructor(private client: TextBubblesClient) {}
 
   async send(params: SendMessageParams): Promise<Message> {
     return this.client.request<Message>("POST", "/v1/messages", params);
@@ -176,7 +176,7 @@ class MessagesResource {
 }
 
 class ChatsResource {
-  constructor(private client: NexsendoClient) {}
+  constructor(private client: TextBubblesClient) {}
 
   async create(params: CreateGroupParams): Promise<Chat> {
     return this.client.request<Chat>("POST", "/v1/chats/groups", params);
@@ -216,7 +216,7 @@ class ChatsResource {
 }
 
 class ContactsResource {
-  constructor(private client: NexsendoClient) {}
+  constructor(private client: TextBubblesClient) {}
 
   async create(params: CreateContactParams): Promise<Contact> {
     return this.client.request<Contact>("POST", "/v1/contacts", params);
@@ -248,7 +248,7 @@ class ContactsResource {
 }
 
 class PaymentsResource {
-  constructor(private client: NexsendoClient) {}
+  constructor(private client: TextBubblesClient) {}
 
   async request(params: RequestPaymentParams): Promise<PaymentRequest> {
     return this.client.request<PaymentRequest>("POST", "/v1/payments/request", params);
@@ -268,7 +268,7 @@ class PaymentsResource {
 }
 
 class ProfileResource {
-  constructor(private client: NexsendoClient) {}
+  constructor(private client: TextBubblesClient) {}
 
   async getState(): Promise<ProfileState> {
     return this.client.request<ProfileState>("GET", "/v1/profile/state");
@@ -284,7 +284,7 @@ class ProfileResource {
 }
 
 class CapabilitiesResource {
-  constructor(private client: NexsendoClient) {}
+  constructor(private client: TextBubblesClient) {}
 
   async check(phoneNumber: string): Promise<CapabilityResult> {
     return this.client.request<CapabilityResult>("GET", `/v1/capabilities/${encodeURIComponent(phoneNumber)}`);
@@ -292,7 +292,7 @@ class CapabilitiesResource {
 }
 
 class WebhooksResource {
-  constructor(private client: NexsendoClient) {}
+  constructor(private client: TextBubblesClient) {}
 
   async get(): Promise<WebhookConfig> {
     return this.client.request<WebhookConfig>("GET", "/v1/webhooks");

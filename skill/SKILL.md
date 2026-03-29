@@ -1,19 +1,19 @@
-# Nexsendo SDK Agent Skill
+# TextBubbles SDK Agent Skill
 
-You are an expert on the `@nexsendo/sdk` TypeScript SDK for the Nexsendo messaging API. Help developers implement features using this SDK.
+You are an expert on the `@textbubbles/sdk` TypeScript SDK for the TextBubbles messaging API. Help developers implement features using this SDK.
 
 ## SDK Overview
 
-The SDK provides a `NexsendoClient` class with resource namespaces: `messages`, `chats`, `contacts`, `payments`, `profile`, `capabilities`, and `webhooks`.
+The SDK provides a `TextBubblesClient` class with resource namespaces: `messages`, `chats`, `contacts`, `payments`, `profile`, `capabilities`, and `webhooks`.
 
 ## Initialization
 
 ```typescript
-import { NexsendoClient } from "@nexsendo/sdk";
+import { TextBubblesClient } from "@textbubbles/sdk";
 
-const nexsendo = new NexsendoClient({
-  apiKey: process.env.NEXSENDO_API_KEY!,
-  baseUrl: "https://api.nexsendo.com", // optional, this is the default
+const tb = new TextBubblesClient({
+  apiKey: process.env.TEXTBUBBLES_API_KEY!,
+  baseUrl: "https://api.textbubbles.com", // optional, this is the default
 });
 ```
 
@@ -100,14 +100,14 @@ const nexsendo = new NexsendoClient({
 
 ```typescript
 // Verification
-import { verifyWebhookSignature, parseWebhookEvent } from "@nexsendo/sdk/webhooks";
+import { verifyWebhookSignature, parseWebhookEvent } from "@textbubbles/sdk/webhooks";
 const isValid = await verifyWebhookSignature(rawBody, signature, secret);
 const event = parseWebhookEvent(rawBody);
 
 // Next.js handler
-import { createWebhookHandler } from "@nexsendo/sdk/nextjs";
+import { createWebhookHandler } from "@textbubbles/sdk/nextjs";
 const handler = createWebhookHandler({
-  secret: process.env.NEXSENDO_WEBHOOK_SECRET!,
+  secret: process.env.TEXTBUBBLES_WEBHOOK_SECRET!,
   handlers: {
     "message.received": async (event) => { /* handle */ },
   },
@@ -119,14 +119,14 @@ const handler = createWebhookHandler({
 ## Type Guards
 
 ```typescript
-import { isMessageEvent, isReactionEvent, isTypingEvent, isPaymentEvent, isFacetimeEvent } from "@nexsendo/sdk/webhooks";
+import { isMessageEvent, isReactionEvent, isTypingEvent, isPaymentEvent, isFacetimeEvent } from "@textbubbles/sdk/webhooks";
 ```
 
 ## Error Handling
 
 ```typescript
-import { NexsendoError, RateLimitError, AuthenticationError, ValidationError, NotFoundError } from "@nexsendo/sdk";
-// All errors extend NexsendoError with: status, code, message, details
+import { TextBubblesError, RateLimitError, AuthenticationError, ValidationError, NotFoundError } from "@textbubbles/sdk";
+// All errors extend TextBubblesError with: status, code, message, details
 // RateLimitError also has: retryAfter (number | null)
 ```
 
@@ -134,43 +134,43 @@ import { NexsendoError, RateLimitError, AuthenticationError, ValidationError, No
 
 ### Schedule and cancel a message
 ```typescript
-const msg = await nexsendo.messages.send({
+const msg = await tb.messages.send({
   to: "+14155551234",
   content: { text: "Reminder!" },
   scheduledAt: "2026-03-29T09:00:00Z",
 });
-await nexsendo.messages.cancelSchedule(msg.id);
+await tb.messages.cancelSchedule(msg.id);
 ```
 
 ### Send carousel then react
 ```typescript
-const carousel = await nexsendo.messages.sendCarousel({
+const carousel = await tb.messages.sendCarousel({
   to: "+14155551234",
   images: ["https://example.com/1.jpg", "https://example.com/2.jpg"],
 });
-await nexsendo.messages.react(carousel.id, { reaction: "love" });
+await tb.messages.react(carousel.id, { reaction: "love" });
 ```
 
 ### Check iMessage before sending
 ```typescript
-const cap = await nexsendo.capabilities.check("+14155551234");
+const cap = await tb.capabilities.check("+14155551234");
 if (cap.iMessage) {
-  await nexsendo.messages.send({ to: "+14155551234", content: { text: "Hi via iMessage!" }, effect: "confetti" });
+  await tb.messages.send({ to: "+14155551234", content: { text: "Hi via iMessage!" }, effect: "confetti" });
 }
 ```
 
 ### Manage group chat
 ```typescript
-const group = await nexsendo.chats.create({ name: "Team", participants: ["+1...", "+1..."] });
-await nexsendo.chats.addParticipant(group.guid, { phoneNumber: "+1..." });
-await nexsendo.chats.sendTyping(group.guid);
-await nexsendo.messages.send({ to: group.guid, content: { text: "Welcome everyone!" } });
+const group = await tb.chats.create({ name: "Team", participants: ["+1...", "+1..."] });
+await tb.chats.addParticipant(group.guid, { phoneNumber: "+1..." });
+await tb.chats.sendTyping(group.guid);
+await tb.messages.send({ to: group.guid, content: { text: "Welcome everyone!" } });
 ```
 
 ## Source Files
 
 - `src/index.ts` — Main exports
-- `src/client.ts` — NexsendoClient class and all resource classes
+- `src/client.ts` — TextBubblesClient class and all resource classes
 - `src/types.ts` — All TypeScript type definitions
 - `src/errors.ts` — Error classes
 - `src/webhooks.ts` — Webhook verification, parsing, type guards

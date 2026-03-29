@@ -35,7 +35,7 @@ export type PaymentRequestStatus = "pending" | "paid" | "cancelled" | "expired";
 
 // ── Client Config ──
 
-export interface NexsendoConfig {
+export interface TextBubblesConfig {
   apiKey: string;
   baseUrl?: string;
 }
